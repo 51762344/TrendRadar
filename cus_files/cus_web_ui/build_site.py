@@ -14,6 +14,7 @@ import json
 import sqlite3
 from collections import defaultdict
 from dataclasses import dataclass
+from datetime import datetime, UTC
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -311,9 +312,14 @@ def write_site(project_root: Path, output_dir: Path, site_data: Dict) -> None:
     source_dir = project_root / "cus_files" / "cus_web_ui"
     target_assets_dir = output_dir / "custom-ui"
     target_assets_dir.mkdir(parents=True, exist_ok=True)
+    asset_version = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
 
     template_html = (source_dir / "index.template.html").read_text(encoding="utf-8")
-    rendered_index = template_html.replace("__SITE_TITLE__", site_data.get("title", "Engineer News Radar"))
+    rendered_index = (
+        template_html
+        .replace("__SITE_TITLE__", site_data.get("title", "Engineer News Radar"))
+        .replace("__ASSET_VERSION__", asset_version)
+    )
 
     (target_assets_dir / "styles.css").write_text(
         (source_dir / "styles.css").read_text(encoding="utf-8"),
