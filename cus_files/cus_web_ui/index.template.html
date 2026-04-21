@@ -15,12 +15,15 @@
   <body>
     <div class="page-shell">
       <header class="hero">
+        <div class="hero-orb hero-orb-a" aria-hidden="true"></div>
+        <div class="hero-orb hero-orb-b" aria-hidden="true"></div>
         <div class="hero-copy">
           <div class="topline">
             <span class="site-mark">Radar</span>
             <span class="site-sub" id="topline-date">更新中</span>
           </div>
           <h1 id="site-title">__SITE_TITLE__</h1>
+          <p class="hero-summary" id="hero-summary">把当天值得追的主题、平台快照和 RSS 更新整理到一页里。</p>
         </div>
         <div class="hero-panel">
           <div class="stats-grid" id="stats-grid"></div>
@@ -34,21 +37,33 @@
       <main class="content">
         <section class="section" id="topics-section">
           <div class="section-head">
-            <h2>主题</h2>
+            <div>
+              <p class="section-kicker">Topics</p>
+              <h2>主题</h2>
+            </div>
+            <p class="section-meta" id="topics-meta">按关键词聚合</p>
           </div>
           <div class="topic-grid" id="topic-grid"></div>
         </section>
 
         <section class="section" id="snapshot-section">
           <div class="section-head">
-            <h2>快照</h2>
+            <div>
+              <p class="section-kicker">Snapshot</p>
+              <h2>快照</h2>
+            </div>
+            <p class="section-meta" id="snapshot-meta">平台即时榜单</p>
           </div>
           <div class="snapshot-grid" id="snapshot-grid"></div>
         </section>
 
         <section class="section hidden" id="rss-section">
           <div class="section-head">
-            <h2>RSS</h2>
+            <div>
+              <p class="section-kicker">Feeds</p>
+              <h2>RSS</h2>
+            </div>
+            <p class="section-meta" id="rss-meta">订阅更新</p>
           </div>
           <div class="rss-list" id="rss-list"></div>
         </section>
