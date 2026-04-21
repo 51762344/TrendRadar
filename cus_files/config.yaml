@@ -19,7 +19,7 @@ platforms:
       name: "澎湃新闻"
 
 rss:
-  enabled: false
+  enabled: true
   freshness_filter:
     enabled: true
     max_age_days: 2
@@ -28,14 +28,40 @@ rss:
       name: "Hacker News"
       url: "https://hnrss.org/frontpage"
 
-    - id: "ruanyifeng"
-      name: "阮一峰的网络日志"
-      url: "http://www.ruanyifeng.com/blog/atom.xml"
-      enabled: true
-      max_age_days: 7
+    - id: "ars-technica"
+      name: "Ars Technica"
+      url: "http://feeds.arstechnica.com/arstechnica/index/"
+
+    - id: "techcrunch"
+      name: "TechCrunch"
+      url: "https://techcrunch.com/feed/"
+
+    - id: "geekwire"
+      name: "GeekWire"
+      url: "https://www.geekwire.com/feed/"
+
+    - id: "venturebeat"
+      name: "VentureBeat"
+      url: "http://feeds.venturebeat.com/VentureBeat"
+
+    - id: "gamesbeat"
+      name: "GamesBeat"
+      url: "http://feeds.venturebeat.com/games"
+
+    - id: "wired-ai"
+      name: "WIRED AI"
+      url: "https://www.wired.com/feed/tag/ai/latest/rss"
+
+    - id: "wired-business"
+      name: "WIRED Business"
+      url: "https://www.wired.com/feed/category/business/latest/rss"
+
+    - id: "coindesk"
+      name: "CoinDesk"
+      url: "https://www.coindesk.com/arc/outboundfeeds/rss/"
 
     - id: "yahoo-finance"
-      name: "雅虎财经"
+      name: "Yahoo Finance"
       url: "https://finance.yahoo.com/news/rssindex"
 
 report:
@@ -52,10 +78,11 @@ filter:
 display:
   region_order:
     - hotlist
+    - rss
   regions:
     hotlist: true
     new_items: false
-    rss: false
+    rss: true
     standalone: false
     ai_analysis: false
   standalone:

@@ -76,6 +76,7 @@ function renderHeadlineItems(items) {
 }
 
 function renderTopics(data, search) {
+  const section = document.getElementById("topics-section");
   const container = document.getElementById("topic-grid");
   const topics = (data.topics || [])
     .map((topic) => ({
@@ -83,6 +84,14 @@ function renderTopics(data, search) {
       items: topic.items.filter((item) => matchesSearch(item, search)),
     }))
     .filter((topic) => topic.items.length > 0);
+
+  if (topics.length === 0) {
+    section.classList.add("hidden");
+    container.innerHTML = "";
+    return;
+  }
+
+  section.classList.remove("hidden");
 
   container.innerHTML = topics
     .map(
