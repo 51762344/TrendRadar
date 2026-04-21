@@ -16,14 +16,17 @@
             <span class="site-mark">Radar</span>
             <span class="site-sub" id="topline-date">更新中</span>
           </div>
-          <h1 id="site-title">__SITE_TITLE__</h1>
+          <div class="hero-title-row">
+            <h1 id="site-title">__SITE_TITLE__</h1>
+            <div class="hero-badges" id="hero-badges" aria-label="页面摘要"></div>
+          </div>
           <p class="hero-summary" id="hero-summary">把当天值得追的主题、平台快照和 RSS 更新整理到一页里。</p>
         </div>
         <div class="hero-panel">
-          <div class="stats-grid" id="stats-grid"></div>
           <label class="search-box">
             <input id="search-input" type="search" placeholder="搜索：比特币、任天堂、芯片" aria-label="搜索主题与快照内容" />
           </label>
+          <div class="stats-grid" id="stats-grid"></div>
           <div class="search-meta hidden" id="search-meta" aria-live="polite"></div>
         </div>
       </header>

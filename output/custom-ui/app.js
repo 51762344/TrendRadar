@@ -31,8 +31,8 @@ function formatCount(value, singularLabel, pluralLabel = singularLabel) {
 function renderStats(data) {
   const container = document.getElementById("stats-grid");
   const stats = [
-    ["数据日期", data.news_date || "-"],
     ["最新抓取", data.latest_crawl_time || "-"],
+    ["数据日期", data.news_date || "-"],
     ["主题数量", String(data.total_topics || 0)],
     ["快照平台", String(data.total_snapshot_platforms || 0)],
   ];
@@ -53,12 +53,22 @@ function renderStats(data) {
     topline.textContent = `更新 ${data.news_date || "-"} ${data.latest_crawl_time || ""}`.trim();
   }
 
+  const badges = [
+    data.total_topics ? `${data.total_topics} 个主题` : null,
+    data.total_snapshot_platforms ? `${data.total_snapshot_platforms} 个平台` : null,
+    data.rss_enabled ? "RSS 已开启" : null,
+  ].filter(Boolean);
+  const badgeNode = document.getElementById("hero-badges");
+  if (badgeNode) {
+    badgeNode.innerHTML = badges.map((item) => `<span class="hero-badge">${escapeHtml(item)}</span>`).join("");
+  }
+
   const summaryBits = [
     data.total_topics ? `${data.total_topics} 个追踪主题` : null,
-    data.total_snapshot_platforms ? `${data.total_snapshot_platforms} 个平台快照` : null,
-    data.rss_enabled ? "附带 RSS 更新" : null,
+    data.total_snapshot_platforms ? `${data.total_snapshot_platforms} 个快照平台` : null,
+    data.rss_enabled ? "RSS 更新已合并展示" : null,
   ].filter(Boolean);
-  setText("hero-summary", summaryBits.join("，") || "把当天值得追的主题、平台快照和 RSS 更新整理到一页里。");
+  setText("hero-summary", summaryBits.join(" · ") || "把当天值得追的主题、平台快照和 RSS 更新整理到一页里。");
 }
 
 function matchesSearch(item, search) {
