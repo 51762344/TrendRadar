@@ -1,0 +1,25 @@
+presets:
+  always_on:
+    name: "全天监控"
+    description: "全天采集并生成网站页面，不推送，不做 AI 分析。"
+    default:
+      collect: true
+      analyze: false
+      ai_mode: "current"
+      push: false
+      report_mode: "daily"
+      once:
+        analyze: false
+        push: false
+    periods: {}
+    day_plans:
+      all_day:
+        periods: []
+    week_map:
+      1: "all_day"
+      2: "all_day"
+      3: "all_day"
+      4: "all_day"
+      5: "all_day"
+      6: "all_day"
+      7: "all_day"

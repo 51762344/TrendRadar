@@ -1,0 +1,136 @@
+app:
+  timezone: "Asia/Shanghai"
+  show_version_update: false
+
+schedule:
+  enabled: true
+  preset: "always_on"
+
+platforms:
+  enabled: true
+  sources:
+    - id: "wallstreetcn-hot"
+      name: "华尔街见闻"
+    - id: "cls-hot"
+      name: "财联社热门"
+    - id: "zhihu"
+      name: "知乎"
+    - id: "thepaper"
+      name: "澎湃新闻"
+
+rss:
+  enabled: true
+  freshness_filter:
+    enabled: true
+    max_age_days: 2
+  feeds:
+    - id: "hacker-news"
+      name: "Hacker News"
+      url: "https://hnrss.org/frontpage"
+
+    - id: "ruanyifeng"
+      name: "阮一峰的网络日志"
+      url: "http://www.ruanyifeng.com/blog/atom.xml"
+      enabled: true
+      max_age_days: 7
+
+    - id: "yahoo-finance"
+      name: "雅虎财经"
+      url: "https://finance.yahoo.com/news/rssindex"
+
+report:
+  mode: "daily"
+  display_mode: "keyword"
+  sort_by_position_first: false
+  rank_threshold: 5
+  max_news_per_keyword: 12
+
+filter:
+  method: "keyword"
+  priority_sort_enabled: true
+
+display:
+  region_order:
+    - hotlist
+    - rss
+  regions:
+    hotlist: true
+    new_items: false
+    rss: true
+    standalone: false
+    ai_analysis: false
+  standalone:
+    platforms: []
+    rss_feeds: []
+    max_items: 20
+
+notification:
+  enabled: false
+  channels:
+    feishu:
+      webhook_url: ""
+    dingtalk:
+      webhook_url: ""
+    wework:
+      webhook_url: ""
+      msg_type: "markdown"
+    telegram:
+      bot_token: ""
+      chat_id: ""
+    email:
+      from: ""
+      password: ""
+      to: ""
+      smtp_server: ""
+      smtp_port: ""
+    ntfy:
+      server_url: "https://ntfy.sh"
+      topic: ""
+      token: ""
+    bark:
+      url: ""
+    slack:
+      webhook_url: ""
+    generic_webhook:
+      webhook_url: ""
+      payload_template: ""
+
+storage:
+  backend: "local"
+  formats:
+    sqlite: true
+    txt: false
+    html: true
+  local:
+    data_dir: "output"
+    retention_days: 0
+  remote:
+    retention_days: 0
+    endpoint_url: ""
+    bucket_name: ""
+    access_key_id: ""
+    secret_access_key: ""
+    region: ""
+  pull:
+    enabled: false
+    days: 7
+
+ai:
+  model: "deepseek/deepseek-chat"
+  api_key: ""
+  api_base: ""
+
+ai_filter:
+  batch_size: 200
+  batch_interval: 2
+  min_score: 0.7
+  reclassify_threshold: 0.6
+  prompt_file: "prompt.txt"
+  extract_prompt_file: "extract_prompt.txt"
+  update_tags_prompt_file: "update_tags_prompt.txt"
+
+ai_analysis:
+  enabled: false
+
+ai_translation:
+  enabled: false
