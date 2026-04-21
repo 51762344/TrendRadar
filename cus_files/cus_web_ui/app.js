@@ -15,6 +15,10 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
+function isMeaningfulUrl(url) {
+  return Boolean(url && url !== "#");
+}
+
 function renderStats(data) {
   const container = document.getElementById("stats-grid");
   const stats = [
@@ -60,7 +64,13 @@ function renderHeadlineItems(items) {
   return items
     .map(
       (item) => `
-        <a class="headline-item" href="${escapeHtml(item.url || "#")}" target="_blank" rel="noreferrer">
+        <a
+          class="headline-item${isMeaningfulUrl(item.url) ? "" : " is-disabled"}"
+          href="${escapeHtml(item.url || "#")}"
+          target="_blank"
+          rel="noreferrer"
+          ${isMeaningfulUrl(item.url) ? "" : 'aria-disabled="true" tabindex="-1"'}
+        >
           <div class="headline-title">${escapeHtml(item.title)}</div>
           <div class="headline-meta">
             ${item.platform_name ? `<span>${escapeHtml(item.platform_name)}</span>` : ""}
@@ -88,7 +98,7 @@ function renderTopics(data, search) {
   if (topics.length === 0) {
     section.classList.add("hidden");
     container.innerHTML = "";
-    return;
+    return 0;
   }
 
   section.classList.remove("hidden");
@@ -116,9 +126,12 @@ function renderTopics(data, search) {
       `
     )
     .join("");
+
+  return topics.reduce((sum, topic) => sum + topic.items.length, 0);
 }
 
 function renderSnapshot(data, search) {
+  const sectionNode = document.getElementById("snapshot-section");
   const container = document.getElementById("snapshot-grid");
   const snapshot = (data.snapshot || [])
     .map((section) => ({
@@ -126,6 +139,14 @@ function renderSnapshot(data, search) {
       items: section.items.filter((item) => matchesSearch(item, search)),
     }))
     .filter((section) => section.items.length > 0);
+
+  if (snapshot.length === 0) {
+    sectionNode.classList.add("hidden");
+    container.innerHTML = "";
+    return 0;
+  }
+
+  sectionNode.classList.remove("hidden");
 
   container.innerHTML = snapshot
     .map(
@@ -142,6 +163,8 @@ function renderSnapshot(data, search) {
       `
     )
     .join("");
+
+  return snapshot.reduce((sum, section) => sum + section.items.length, 0);
 }
 
 function renderRss(data, search) {
@@ -152,7 +175,7 @@ function renderRss(data, search) {
   if (!data.rss_enabled || rssItems.length === 0) {
     section.classList.add("hidden");
     container.innerHTML = "";
-    return;
+    return 0;
   }
 
   section.classList.remove("hidden");
@@ -171,21 +194,52 @@ function renderRss(data, search) {
       `
     )
     .join("");
+
+  return rssItems.length;
 }
 
-function render(data, search = "") {
-  if (data.empty) {
-    document.getElementById("empty-state").classList.remove("hidden");
-    document.querySelectorAll(".section").forEach((section) => {
-      if (section.id !== "empty-state") section.classList.add("hidden");
-    });
+function updateSearchMeta(search, totalMatches) {
+  const node = document.getElementById("search-meta");
+  if (!node) return;
+
+  if (!search) {
+    node.classList.add("hidden");
+    node.textContent = "";
     return;
   }
 
+  node.classList.remove("hidden");
+  node.textContent = totalMatches > 0 ? `“${search}” 找到 ${totalMatches} 条结果` : `“${search}” 暂无匹配结果`;
+}
+
+function render(data, search = "") {
+  const emptyState = document.getElementById("empty-state");
+
+  if (data.empty) {
+    emptyState.classList.remove("hidden");
+    document.querySelectorAll(".section").forEach((section) => {
+      if (section.id !== "empty-state") section.classList.add("hidden");
+    });
+    updateSearchMeta(search, 0);
+    return;
+  }
+
+  emptyState.classList.add("hidden");
   renderStats(data);
-  renderTopics(data, search);
-  renderSnapshot(data, search);
-  renderRss(data, search);
+  const topicMatches = renderTopics(data, search);
+  const snapshotMatches = renderSnapshot(data, search);
+  const rssMatches = renderRss(data, search);
+  const totalMatches = topicMatches + snapshotMatches + rssMatches;
+
+  updateSearchMeta(search, totalMatches);
+
+  if (search && totalMatches === 0) {
+    emptyState.classList.remove("hidden");
+    emptyState.innerHTML = `
+      <h2>没有找到相关内容</h2>
+      <p>换个关键词试试，或者清空搜索查看全部内容。</p>
+    `;
+  }
 }
 
 async function main() {
