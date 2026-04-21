@@ -34,6 +34,11 @@ function renderStats(data) {
       `
     )
     .join("");
+
+  const topline = document.getElementById("topline-date");
+  if (topline) {
+    topline.textContent = `更新 ${data.news_date || "-"} ${data.latest_crawl_time || ""}`.trim();
+  }
 }
 
 function matchesSearch(item, search) {

@@ -55,14 +55,30 @@ a {
   border-radius: var(--radius-lg);
 }
 
-.eyebrow,
-.section-kicker {
-  margin: 0 0 10px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.topline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.site-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
   color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.site-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
 }
 
 .hero h1 {
@@ -71,14 +87,6 @@ a {
   font-size: clamp(2rem, 4vw, 3.7rem);
   line-height: 0.96;
   letter-spacing: -0.04em;
-}
-
-.hero-text {
-  max-width: 44rem;
-  margin: 18px 0 0;
-  font-size: 1.03rem;
-  line-height: 1.7;
-  color: var(--muted);
 }
 
 .hero-panel {
@@ -120,17 +128,10 @@ a {
 }
 
 .search-box {
-  display: grid;
-  gap: 8px;
   padding: 18px;
   border-radius: var(--radius-md);
   background: var(--panel-strong);
   border: 1px solid rgba(28, 42, 56, 0.08);
-}
-
-.search-box span {
-  font-size: 0.86rem;
-  color: var(--muted);
 }
 
 .search-box input {
@@ -155,25 +156,14 @@ a {
 }
 
 .section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 16px;
   margin-bottom: 20px;
 }
 
 .section-head h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
   letter-spacing: -0.03em;
-}
-
-.section-note {
-  margin: 0;
-  max-width: 28rem;
-  color: var(--muted);
-  line-height: 1.6;
-  text-align: right;
 }
 
 .topic-grid {
@@ -323,12 +313,7 @@ a {
   }
 
   .section-head {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .section-note {
-    text-align: left;
+    margin-bottom: 16px;
   }
 }
 
