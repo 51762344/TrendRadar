@@ -1,6 +1,24 @@
 #!/bin/bash
 set -e
 
+generate_custom_ui() {
+    if [ "${CUSTOM_WEB_UI_ENABLED:-false}" != "true" ]; then
+        return 0
+    fi
+
+    if [ ! -f "/app/cus_files/cus_web_ui/build_site.py" ]; then
+        echo "⚠️ 自定义 UI 生成脚本不存在，跳过"
+        return 0
+    fi
+
+    echo "🎨 生成自定义静态首页..."
+    python /app/cus_files/cus_web_ui/build_site.py \
+        --project-root /app \
+        --output-dir "${CUSTOM_WEB_UI_OUTPUT_DIR:-output}" \
+        --title "${CUSTOM_WEB_UI_TITLE:-Engineer News Radar}" || \
+        echo "⚠️ 自定义 UI 生成失败，保留官方页面"
+}
+
 # 检查配置文件
 if [ ! -f "/app/config/config.yaml" ] || [ ! -f "/app/config/frequency_words.txt" ]; then
     echo "❌ 配置文件缺失"
@@ -21,7 +39,11 @@ case "${RUN_MODE:-cron}" in
     fi
 
     # 生成 crontab
-    echo "$CRON_EXPR cd /app && python -m trendradar" > /tmp/crontab
+    if [ "${CUSTOM_WEB_UI_ENABLED:-false}" = "true" ]; then
+        echo "$CRON_EXPR cd /app && python -m trendradar && python /app/cus_files/cus_web_ui/build_site.py --project-root /app --output-dir \"\${CUSTOM_WEB_UI_OUTPUT_DIR:-output}\" --title \"\${CUSTOM_WEB_UI_TITLE:-Engineer News Radar}\"" > /tmp/crontab
+    else
+        echo "$CRON_EXPR cd /app && python -m trendradar" > /tmp/crontab
+    fi
     
     echo "📅 生成的crontab内容:"
     cat /tmp/crontab
@@ -35,6 +57,7 @@ case "${RUN_MODE:-cron}" in
     if [ "${IMMEDIATE_RUN:-false}" = "true" ]; then
         echo "▶️ 立即执行一次"
         python -m trendradar
+        generate_custom_ui
     fi
 
     # 启动 Web 服务器

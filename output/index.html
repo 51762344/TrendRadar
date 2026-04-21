@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Engineer News Radar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./custom-ui/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Personal News Desk</p>
+          <h1 id="site-title">Engineer News Radar</h1>
+          <p class="hero-text">
+            一个更克制的个人资讯首页。优先看科技、金融科技、BTC、游戏与电影，
+            少一点热搜噪音，多一点真正想读的东西。
+          </p>
+        </div>
+        <div class="hero-panel">
+          <div class="stats-grid" id="stats-grid"></div>
+          <label class="search-box">
+            <span>搜索标题</span>
+            <input id="search-input" type="search" placeholder="比如：比特币、任天堂、芯片" />
+          </label>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Topic View</p>
+              <h2>兴趣主题</h2>
+            </div>
+            <p class="section-note">按你的关键词做轻量聚合，适合扫一眼当天重点。</p>
+          </div>
+          <div class="topic-grid" id="topic-grid"></div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Latest Snapshot</p>
+              <h2>最新快照</h2>
+            </div>
+            <p class="section-note">展示最近一次抓取的榜单状态，便于快速浏览。</p>
+          </div>
+          <div class="snapshot-grid" id="snapshot-grid"></div>
+        </section>
+
+        <section class="section hidden" id="rss-section">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">RSS Stream</p>
+              <h2>专业 RSS</h2>
+            </div>
+            <p class="section-note">更专业、更稳定的订阅源，适合长期阅读。</p>
+          </div>
+          <div class="rss-list" id="rss-list"></div>
+        </section>
+
+        <section class="section empty-state hidden" id="empty-state">
+          <h2>还没有可展示的数据</h2>
+          <p>第一次抓取完成后，这里会自动生成你自己的静态新闻首页。</p>
+        </section>
+      </main>
+    </div>
+
+    <script src="./custom-ui/app.js" defer></script>
+  </body>
+</html>

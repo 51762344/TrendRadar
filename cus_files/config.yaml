@@ -19,7 +19,7 @@ platforms:
       name: "澎湃新闻"
 
 rss:
-  enabled: true
+  enabled: false
   freshness_filter:
     enabled: true
     max_age_days: 2
@@ -52,11 +52,10 @@ filter:
 display:
   region_order:
     - hotlist
-    - rss
   regions:
     hotlist: true
     new_items: false
-    rss: true
+    rss: false
     standalone: false
     ai_analysis: false
   standalone:

@@ -82,13 +82,16 @@ COPY config/ai_filter/ /app/config/ai_filter/
 COPY config/ai_analysis_prompt.txt /app/config/ai_analysis_prompt.txt
 COPY config/ai_interests.txt /app/config/ai_interests.txt
 COPY config/ai_translation_prompt.txt /app/config/ai_translation_prompt.txt
+COPY cus_files/cus_web_ui/ /app/cus_files/cus_web_ui/
 COPY cus_files/config.yaml /app/config/config.yaml
 COPY cus_files/timeline.yaml /app/config/timeline.yaml
 COPY cus_files/frequency_words.txt /app/config/frequency_words.txt
 
 ENV PYTHONUNBUFFERED=1 \
     CONFIG_PATH=/app/config/config.yaml \
-    FREQUENCY_WORDS_PATH=/app/config/frequency_words.txt
+    FREQUENCY_WORDS_PATH=/app/config/frequency_words.txt \
+    CUSTOM_WEB_UI_ENABLED=true \
+    CUSTOM_WEB_UI_TITLE="Engineer News Radar"
 
 EXPOSE 8080
 
