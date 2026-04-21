@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sqlite3
 from collections import defaultdict
 from dataclasses import dataclass
@@ -69,6 +70,24 @@ def load_yaml(path: Path) -> Dict:
     if not path.exists():
         return {}
     return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+
+
+def resolve_config_paths(project_root: Path) -> tuple[Path, Path]:
+    env_config = os.environ.get("CONFIG_PATH", "").strip()
+    if env_config:
+        config_path = Path(env_config)
+        if not config_path.is_absolute():
+            config_path = (project_root / config_path).resolve()
+    else:
+        default_config = project_root / "config" / "config.yaml"
+        fallback_config = project_root / "cus_files" / "config.yaml"
+        config_path = default_config if default_config.exists() else fallback_config
+
+    keyword_path = config_path.parent / "frequency_words.txt"
+    if not keyword_path.exists():
+        keyword_path = project_root / "cus_files" / "frequency_words.txt"
+
+    return config_path, keyword_path
 
 
 def parse_keyword_groups(path: Path) -> List[KeywordGroup]:
@@ -248,8 +267,9 @@ def build_site_data(
     max_platform_items: int,
     max_rss_items: int,
 ) -> Dict:
-    config = load_yaml(project_root / "cus_files" / "config.yaml")
-    keyword_groups = parse_keyword_groups(project_root / "cus_files" / "frequency_words.txt")
+    config_path, keyword_path = resolve_config_paths(project_root)
+    config = load_yaml(config_path)
+    keyword_groups = parse_keyword_groups(keyword_path)
     rss_enabled = bool(config.get("rss", {}).get("enabled", False))
     enabled_platform_ids = {
         src.get("id")
@@ -293,7 +313,7 @@ def build_site_data(
     return {
         "title": title,
         "empty": False,
-        "generated_from": "cus_files/cus_web_ui",
+        "generated_from": str(config_path.relative_to(project_root)) if config_path.is_relative_to(project_root) else str(config_path),
         "news_date": news_data["date"],
         "latest_crawl_time": latest_crawl_time,
         "latest_total_items": news_data["latest_total_items"],

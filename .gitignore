@@ -1,0 +1,8 @@
+# Python bytecode caches
+__pycache__/
+*.py[cod]
+
+# Runtime-generated TrendRadar data
+/output/html/
+/output/news/*.db
+/output/rss/*.db

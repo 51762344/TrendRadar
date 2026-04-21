@@ -53,10 +53,12 @@ rss:
     - id: "venturebeat"
       name: "VentureBeat"
       url: "http://feeds.venturebeat.com/VentureBeat"
+      enabled: false
 
     - id: "gamesbeat"
       name: "GamesBeat"
       url: "http://feeds.venturebeat.com/games"
+      enabled: false
 
     - id: "wired-ai"
       name: "WIRED AI"
