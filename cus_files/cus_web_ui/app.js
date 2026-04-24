@@ -53,6 +53,16 @@ function renderStats(data) {
     topline.textContent = `更新 ${data.news_date || "-"} ${data.latest_crawl_time || ""}`.trim();
   }
 
+  const statusSummary = document.getElementById("status-summary-text");
+  if (statusSummary) {
+    const summaryBits = [
+      data.latest_crawl_time || null,
+      data.total_topics ? `${data.total_topics} 主题` : null,
+      data.total_snapshot_platforms ? `${data.total_snapshot_platforms} 平台` : null,
+    ].filter(Boolean);
+    statusSummary.textContent = summaryBits.join(" · ") || "暂无状态";
+  }
+
   const badges = [
     data.total_topics ? `${data.total_topics} 个主题` : null,
     data.total_snapshot_platforms ? `${data.total_snapshot_platforms} 个平台` : null,
@@ -69,6 +79,12 @@ function renderStats(data) {
     data.rss_enabled ? "RSS 更新已合并展示" : null,
   ].filter(Boolean);
   setText("hero-summary", summaryBits.join(" · ") || "把当天值得追的主题、平台快照和 RSS 更新整理到一页里。");
+}
+
+function syncStatusDrawer() {
+  const drawer = document.getElementById("status-drawer");
+  if (!drawer) return;
+  drawer.open = !window.matchMedia("(max-width: 640px)").matches;
 }
 
 function matchesSearch(item, search) {
@@ -280,7 +296,15 @@ async function main() {
     document.title = data.title || document.title;
     const titleNode = document.getElementById("site-title");
     if (titleNode && data.title) titleNode.textContent = data.title;
+    syncStatusDrawer();
     render(data);
+
+    const mobileStatusMedia = window.matchMedia("(max-width: 640px)");
+    if (typeof mobileStatusMedia.addEventListener === "function") {
+      mobileStatusMedia.addEventListener("change", syncStatusDrawer);
+    } else if (typeof mobileStatusMedia.addListener === "function") {
+      mobileStatusMedia.addListener(syncStatusDrawer);
+    }
 
     const input = document.getElementById("search-input");
     input.addEventListener("input", (event) => {

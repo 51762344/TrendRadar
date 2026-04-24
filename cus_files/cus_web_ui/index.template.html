@@ -26,7 +26,13 @@
           <label class="search-box">
             <input id="search-input" type="search" placeholder="搜索：比特币、任天堂、芯片" aria-label="搜索主题与快照内容" />
           </label>
-          <div class="stats-grid" id="stats-grid"></div>
+          <details class="status-drawer" id="status-drawer" open>
+            <summary class="status-summary">
+              <span class="status-summary-label">状态</span>
+              <span class="status-summary-text" id="status-summary-text">更新中</span>
+            </summary>
+            <div class="stats-grid" id="stats-grid"></div>
+          </details>
           <div class="search-meta hidden" id="search-meta" aria-live="polite"></div>
         </div>
       </header>

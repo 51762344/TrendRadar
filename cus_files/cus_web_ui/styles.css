@@ -186,6 +186,64 @@ a {
   align-content: start;
 }
 
+.status-drawer {
+  display: grid;
+  gap: 8px;
+}
+
+.status-summary {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.status-summary::-webkit-details-marker {
+  display: none;
+}
+
+.status-summary-label {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status-summary-text {
+  min-width: 0;
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-summary::after {
+  content: "收起";
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 113, 227, 0.08);
+  color: var(--accent-strong);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.status-drawer:not([open]) .status-summary::after {
+  content: "展开";
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -548,8 +606,8 @@ a {
   }
 
   .hero {
-    gap: 12px;
-    padding: 14px 14px 12px;
+    gap: 10px;
+    padding: 12px 12px 10px;
     border-radius: 24px;
   }
 
@@ -573,24 +631,25 @@ a {
   }
 
   .topline {
-    margin-bottom: 4px;
+    gap: 6px;
+    margin-bottom: 2px;
   }
 
   .site-mark {
-    padding: 4px 9px;
-    font-size: 0.62rem;
+    padding: 3px 8px;
+    font-size: 0.58rem;
   }
 
   .site-sub {
-    font-size: 0.76rem;
+    font-size: 0.7rem;
   }
 
   .hero-title-row {
-    gap: 8px;
+    gap: 6px;
   }
 
   .hero h1 {
-    font-size: 1.18rem;
+    font-size: 1.12rem;
     line-height: 1.08;
     letter-spacing: -0.05em;
     max-width: none;
@@ -605,14 +664,42 @@ a {
   }
 
   .hero-badge {
-    min-height: 24px;
-    padding: 4px 8px;
-    font-size: 0.68rem;
+    min-height: 22px;
+    padding: 3px 8px;
+    font-size: 0.64rem;
+  }
+
+  .hero-panel {
+    gap: 7px;
+  }
+
+  .status-summary {
+    display: flex;
+    min-height: 32px;
+    padding: 6px 8px 6px 10px;
+  }
+
+  .status-summary-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+
+  .status-summary-text {
+    font-size: 0.72rem;
+  }
+
+  .status-summary::after {
+    padding: 3px 7px;
+    font-size: 0.64rem;
   }
 
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
+  }
+
+  .status-drawer:not([open]) .stats-grid {
+    display: none;
   }
 
   .stat-card {
@@ -632,9 +719,9 @@ a {
   }
 
   .search-box input {
-    min-height: 40px;
-    padding: 8px 12px 8px 34px;
-    font-size: 0.92rem;
+    min-height: 38px;
+    padding: 7px 12px 7px 34px;
+    font-size: 0.88rem;
   }
 
   .search-meta {
@@ -732,7 +819,7 @@ a {
   }
 
   .hero {
-    padding: 14px 12px;
+    padding: 11px 10px 9px;
   }
 
   .section {
@@ -740,7 +827,16 @@ a {
   }
 
   .hero h1 {
-    font-size: 1.08rem;
+    font-size: 1rem;
+  }
+
+  .status-summary {
+    min-height: 30px;
+    padding-inline: 9px 7px;
+  }
+
+  .status-summary-text {
+    font-size: 0.68rem;
   }
 
   .stat-card {
