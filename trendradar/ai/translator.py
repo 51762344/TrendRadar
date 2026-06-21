@@ -187,11 +187,16 @@ class AITranslator:
             translated_texts, raw_parsed_count = self._parse_batch_response(response, len(non_empty_texts))
             batch_result.parsed_count = raw_parsed_count
 
-            # 填充结果
+            # 填充结果（跳过空翻译，避免用空字符串覆盖原始标题）
             for idx, translated in zip(non_empty_indices, translated_texts):
-                batch_result.results[idx].translated_text = translated
-                batch_result.results[idx].success = True
-                batch_result.success_count += 1
+                if translated and translated.strip():
+                    batch_result.results[idx].translated_text = translated
+                    batch_result.results[idx].success = True
+                    batch_result.success_count += 1
+                else:
+                    batch_result.results[idx].translated_text = batch_result.results[idx].original_text
+                    batch_result.results[idx].success = True
+                    batch_result.success_count += 1
 
         except Exception as e:
             error_msg = f"批量翻译失败: {type(e).__name__}: {str(e)[:100]}"
@@ -248,14 +253,19 @@ class AITranslator:
         if current_idx is not None:
             results.append((current_idx, "\n".join(current_text).strip()))
 
-        # 按索引排序并提取文本
-        results.sort(key=lambda x: x[0])
-        translated = [text for _, text in results]
-        raw_parsed_count = len(translated)
+        # 基于 AI 返回的真实编号精确回填，而非位置顺序，避免 AI 漏号/乱序时整体错位
+        raw_parsed_count = len(results)
 
-        # 如果解析结果数量不匹配，尝试简单按行分割
-        if len(translated) != expected_count:
-            # 回退：按行分割（去除编号）
+        if results:
+            # 编号 i(1-based) 对应位置 i-1；缺失的编号位置留空（由上层保留原文），
+            # 不让后续译文顶替到相邻标题上
+            idx_to_text = {}
+            for idx, text in results:
+                if 1 <= idx <= expected_count:
+                    idx_to_text[idx] = text
+            translated = [idx_to_text.get(i + 1, "") for i in range(expected_count)]
+        else:
+            # AI 未使用 [编号] 格式：回退为按行顺序提取
             translated = []
             for line in lines:
                 stripped = line.strip()

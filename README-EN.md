@@ -11,8 +11,10 @@ Deploy in <strong>30 seconds</strong> — Say goodbye to endless scrolling, only
 [![GitHub Stars](https://img.shields.io/github/stars/sansan0/TrendRadar?style=flat-square&logo=github&color=yellow)](https://github.com/sansan0/TrendRadar/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/sansan0/TrendRadar?style=flat-square&logo=github&color=blue)](https://github.com/sansan0/TrendRadar/network/members)
 [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v6.6.1-blue.svg)](https://github.com/sansan0/TrendRadar)
-[![MCP](https://img.shields.io/badge/MCP-v4.0.2-green.svg)](https://github.com/sansan0/TrendRadar)
+[![Version](https://img.shields.io/badge/version-v6.10.0-blue.svg)](https://github.com/sansan0/TrendRadar)
+[![MCP](https://img.shields.io/badge/MCP-v4.1.0-green.svg)](https://github.com/sansan0/TrendRadar)
+[![Docker Pulls](https://img.shields.io/docker/pulls/wantcat/trendradar?style=flat-square&logo=docker&logoColor=white&label=TrendRadar%20Pulls&color=2496ED)](https://hub.docker.com/r/wantcat/trendradar)
+[![Docker Pulls](https://img.shields.io/docker/pulls/wantcat/trendradar-mcp?style=flat-square&logo=docker&logoColor=white&label=MCP%20Pulls&color=2496ED)](https://hub.docker.com/r/wantcat/trendradar-mcp)
 [![RSS](https://img.shields.io/badge/RSS-Feed_Support-orange.svg?style=flat-square&logo=rss&logoColor=white)](https://github.com/sansan0/TrendRadar)
 [![AI Translation](https://img.shields.io/badge/AI-Multi--Language-purple.svg?style=flat-square)](https://github.com/sansan0/TrendRadar)
 
@@ -139,6 +141,8 @@ After communication, the author indicated no concerns about server pressure, but
 <div align="center">
 
 > **Sponsorship Open**
+>
+> Interested in sponsoring? Trigger the auto-reply in my WeChat Official Account to get my contact details
 
 </div>
 
@@ -193,14 +197,11 @@ This contributes to the sustainable maintenance of the project and the growth of
 - **Tip**: Check [Changelog] to understand specific [Features]
 
 
-### 2026/03/28 - v6.6.0
+### 2026/06/19 - v6.10.0
 
-- **HTML Report Browser Enhancement**: Open the HTML report in a browser to unlock widescreen layout, Tab navigation for keyword groups and standalone sections, real-time title search, and more — email clients still show the original narrow layout with zero regression
-- **Dark Mode**: One-click toggle for dark theme with automatic preference persistence, ideal for nighttime reading
-- **One-Click Copy**: Hover over a news number to copy the title and link instantly for quick sharing
-- **Export Optimization**: Full-page and segmented screenshots merged into a dropdown export button; screenshots auto-revert to clean layout
-- **Keyboard Shortcuts**: `W` widescreen toggle, `D` dark mode, `/` search, `?` view all shortcuts
-- **Reading Progress Bar**: Real-time reading progress displayed at the top of the page
+- **AI Translation Batch Processing**: Automatically splits large translation requests into batches, preventing single-request overflow failures
+- **Module Refactoring**: Split context.py and \_\_main\_\_.py, extracted AI filter pipeline into a standalone module for clearer responsibilities and easier maintenance
+- **Fixed Feishu Source Label Display**: Fixed source labels and AI standalone source overview being swallowed by CommonMark rendering in Feishu cards
 
 ### 2026/02/09 - mcp-v4.0.0
 
@@ -213,6 +214,35 @@ This contributes to the sustainable maintenance of the project and the growth of
 
 <details>
 <summary>👉 Click to expand: <strong>Historical Updates</strong></summary>
+
+### 2026/06/02 - v6.9.0
+
+- **Platform Domain Safety Validation**: New `expected_domain` config option validates returned data link domains — mismatched data is automatically discarded with a warning, effectively preventing link hijacking or data tampering
+- **Custom Platform API URL**: Support self-hosting newsnow and configuring `api_url` to use your own data source
+
+### 2026/05/23 - v6.8.0
+
+- **HTML Report Major Enhancement**: Added report metadata display (generation time, data sources, version), dark mode auto-adaptation, improved Tab bar interaction, and trend arrow visualization for a significantly better browser reading experience
+- **Version Check CDN Multi-Source Fallback**: Version check API now supports automatic fallback across GitHub → jsDelivr → Cloudflare CDN sources, ensuring reliable update notifications even in restricted network environments
+- **Display Region Toggles**: HTML reports and emails now properly respect `display.regions.ai_analysis` and `display.regions.standalone` switches — disabled regions are no longer rendered
+- **Export Button Fix**: Fixed dropdown menu icons disappearing after clicking the export button
+- **Markdown Export Fix**: Fixed JS newline character escaping error in HTML report Markdown export
+
+### 2026/05/15 - v6.7.0
+
+- **Markdown Export**: New Markdown option in the report export dropdown — generate structured text with clickable links, perfect for LLM processing and cross-platform sharing ([#1121](https://github.com/sansan0/TrendRadar/issues/1121))
+- **RSS GUID Deduplication**: RSS storage now supports GUID field with priority order guid > url, preventing duplicate entries caused by URL changes for the same article
+- **Empty Title Protection**: Full-chain fallback logic across parser, renderer, and translation backfill ensures items without titles still display properly
+- **Translation Quality Enhancement**: Translation prompt now enforces numbered-item ordering preservation; empty translation results no longer overwrite original titles
+
+### 2026/03/28 - v6.6.0
+
+- **HTML Report Browser Enhancement**: Open the HTML report in a browser to unlock widescreen layout, Tab navigation for keyword groups and standalone sections, real-time title search, and more — email clients still show the original narrow layout with zero regression
+- **Dark Mode**: One-click toggle for dark theme with automatic preference persistence, ideal for nighttime reading
+- **One-Click Copy**: Hover over a news number to copy the title and link instantly for quick sharing
+- **Export Optimization**: Full-page and segmented screenshots merged into a dropdown export button; screenshots auto-revert to clean layout
+- **Keyboard Shortcuts**: `W` widescreen toggle, `D` dark mode, `/` search, `?` view all shortcuts
+- **Reading Progress Bar**: Real-time reading progress displayed at the top of the page
 
 ### 2026/03/12 - v6.5.0
 
@@ -1241,84 +1271,45 @@ Transform from "algorithm recommendation captivity" to "actively getting the inf
 <summary> <strong>👉 Click to expand: Feishu Bot</strong> (Message display is relatively friendly)</summary>
 <br>
 
+> **Note**: The original "Feishu BotBuilder" will be discontinued on June 30, 2026. Please use the **Custom Group Bot** method below. Existing BotBuilder webhook URLs will no longer work and need to be reconfigured.
+
 **Note**: If **AI Analysis** is enabled, Feishu push notifications may occasionally (approx. 5% probability) experience a few minutes of delay. This is likely due to the platform's internal compliance auditing for AI-generated content.
 
 **GitHub Secret Configuration (⚠️ Name must match exactly):**
 - **Name**: `FEISHU_WEBHOOK_URL` (Please copy and paste this name, do not type manually)
-- **Secret (Value)**: Your Feishu bot Webhook address (link starts with https://www.feishu.cn/flow/api/trigger-webhook/********)
-<br>
+- **Secret (Value)**: Your Feishu custom bot Webhook address (format: `https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxxxx`)
 
-Two methods available, **Method 1** is simpler, **Method 2** is more complex (but stable push)
+**Configuration Steps:**
 
-Method 1 discovered and suggested by **ziventian**, thanks to them. Default is personal push, group push can be configured via [#97](https://github.com/sansan0/TrendRadar/issues/97)
+1. Enter the target group, click the **More** button at the top right of the group, and click **Settings**.
 
-**Method 1:**
+![Group Settings](_image/feishu-bot/step1-group-settings.png)
 
-> For some users, additional operations needed to avoid "System Error". Need to search for the bot on mobile and enable Feishu bot application (suggestion from community, can refer)
+2. In the **Settings** panel on the right, click **Group Bots**.
 
-1. Open in PC browser https://botbuilder.feishu.cn/home/my-command
+![Group Bots](_image/feishu-bot/step2-group-bot.png)
 
-2. Click "New Bot Command"
+3. In the **Group Bots** panel, click **Add Bot**.
 
-3. Click "Select Trigger", scroll down, click "Webhook Trigger"
+4. In the **Add Bot** dialog, find and click **Custom Bot**.
 
-4. Now you'll see "Webhook Address", copy this link to local notepad temporarily, continue with next steps
+![Select Custom Bot](_image/feishu-bot/step3-custom-bot.png)
 
-5. In "Parameters" put the following content, then click "Done"
+5. Set the custom bot's avatar, name (e.g., "TrendRadar Trending Monitor") and description, then click **Add**.
 
-```json
-{
-  "message_type": "text",
-  "content": {
-    "text": "{{Content}}"
-  }
-}
-```
+![Set Bot Info](_image/feishu-bot/step4-set-name.png)
 
-6. Click "Select Action" > "Send via Official Bot"
+6. Copy the custom bot's **webhook address**, and click **Done**.
 
-7. Message title fill "TrendRadar Trending Monitor"
+> ⚠️ Please keep this webhook address safe. Do not publish it on GitHub, blogs, or any publicly accessible websites to prevent unauthorized use.
 
-8. Most critical part, click + button, select "Webhook Trigger", then arrange as shown in image
+![Copy Webhook URL](_image/feishu-bot/step5-webhook-url.png)
 
-![Feishu Bot Config Example](_image/feishu.png)
+7. Configure the copied Webhook address in GitHub Secrets as `FEISHU_WEBHOOK_URL`.
 
-9. After configuration, put Webhook address from step 4 into GitHub Secrets `FEISHU_WEBHOOK_URL`
-
-<br>
-
-**Method 2:**
-
-1. Open in PC browser https://botbuilder.feishu.cn/home/my-app
-
-2. Click "New Bot Application"
-
-3. After entering the created application, click "Process Design" > "Create Process" > "Select Trigger"
-
-4. Scroll down, click "Webhook Trigger"
-
-5. Now you'll see "Webhook Address", copy this link to local notepad temporarily, continue with next steps
-
-6. In "Parameters" put the following content, then click "Done"
-
-```json
-{
-  "message_type": "text",
-  "content": {
-    "text": "{{Content}}"
-  }
-}
-```
-
-7. Click "Select Action" > "Send Feishu Message", check "Group Message", then click the input box below, click "Groups I Manage" (if no group, you can create one in Feishu app)
-
-8. Message title fill "TrendRadar Trending Monitor"
-
-9. Most critical part, click + button, select "Webhook Trigger", then arrange as shown in image
-
-![Feishu Bot Config Example](_image/feishu.png)
-
-10. After configuration, put Webhook address from step 5 into GitHub Secrets `FEISHU_WEBHOOK_URL`
+> 💡 After configuration, you can click the bot avatar next to the group name to enter the custom bot details page and manage its settings.
+>
+> 📖 Official documentation: [Custom Bot Guide](https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot)
 
 </details>
 
