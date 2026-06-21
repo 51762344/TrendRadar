@@ -60,6 +60,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # 再复制项目代码并安装项目本身
 COPY docker/manage.py .
+COPY mcp_server/ ./mcp_server/
 COPY trendradar/ ./trendradar/
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-dev

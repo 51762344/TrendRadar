@@ -47,13 +47,13 @@ TRENDRADAR_PROJECT_ROOT=/home/cuhp/projects/TrendRadar \
 python -m trendradar.api --host 0.0.0.0 --port 3334
 ```
 
-Zeabur 如果服务暴露的是 `8080`，直接改端口即可：
+Zeabur 如果服务暴露的是 `8080`，直接改端口即可。最简单的 API 专用模式：
 
 ```bash
 TRENDRADAR_API_TOKEN=<token> \
 TRENDRADAR_API_PORT=8080 \
 TRENDRADAR_PROJECT_ROOT=/app \
-trendradar-api
+RUN_MODE=api
 ```
 
 ## Token
@@ -78,13 +78,25 @@ Authorization: Bearer <TRENDRADAR_API_TOKEN>
 
 ## Zeabur 配置
 
-TrendRadar 服务建议配置：
+TrendRadar 一键部署服务建议配置：
 
 ```env
+RUN_MODE=api
 TRENDRADAR_API_PORT=8080
 TRENDRADAR_API_TOKEN=<token>
 TRENDRADAR_PROJECT_ROOT=/app
 ```
+
+如果希望这个服务继续按 `CRON_SCHEDULE` 定时爬取，同时让 REST API 占用 Zeabur 暴露的 `8080` 端口，可以使用：
+
+```env
+RUN_MODE=cron
+TRENDRADAR_API_PORT=8080
+TRENDRADAR_API_TOKEN=<token>
+TRENDRADAR_PROJECT_ROOT=/app
+```
+
+这种模式下，入口脚本会跳过旧的静态 Web 服务器，避免和 REST API 争抢 `8080` 端口。
 
 如果 Zeabur 服务名为 `trendradar`，`cus_bot_ui` 建议使用内网地址：
 

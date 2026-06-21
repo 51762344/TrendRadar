@@ -19,6 +19,33 @@ generate_custom_ui() {
         echo "⚠️ 自定义 UI 生成失败，保留官方页面"
 }
 
+api_requested() {
+    [ "${TRENDRADAR_API_ENABLED:-false}" = "true" ] || [ -n "${TRENDRADAR_API_PORT:-}" ]
+}
+
+start_rest_api_background() {
+    API_HOST="${TRENDRADAR_API_HOST:-0.0.0.0}"
+    API_PORT="${TRENDRADAR_API_PORT:-3334}"
+
+    echo "📰 启动 TrendRadar REST API: ${API_HOST}:${API_PORT}"
+    python -m trendradar.api --host "$API_HOST" --port "$API_PORT" &
+    API_PID=$!
+    sleep 1
+
+    if ! kill -0 "$API_PID" 2>/dev/null; then
+        echo "❌ TrendRadar REST API 启动失败"
+        exit 1
+    fi
+}
+
+exec_rest_api() {
+    API_HOST="${TRENDRADAR_API_HOST:-0.0.0.0}"
+    API_PORT="${TRENDRADAR_API_PORT:-${WEBSERVER_PORT:-8080}}"
+
+    echo "📰 启动 TrendRadar REST API: ${API_HOST}:${API_PORT}"
+    exec python -m trendradar.api --host "$API_HOST" --port "$API_PORT"
+}
+
 # 检查配置文件
 if [ ! -f "/app/config/config.yaml" ] || [ ! -f "/app/config/frequency_words.txt" ]; then
     echo "❌ 配置文件缺失"
@@ -26,6 +53,9 @@ if [ ! -f "/app/config/config.yaml" ] || [ ! -f "/app/config/frequency_words.txt
 fi
 
 case "${RUN_MODE:-cron}" in
+"api")
+    exec_rest_api
+    ;;
 "once")
     echo "🔄 单次执行"
     exec python -m trendradar
@@ -60,9 +90,21 @@ case "${RUN_MODE:-cron}" in
         generate_custom_ui
     fi
 
-    # 启动 Web 服务器
-    echo "🌐 启动 Web 服务器..."
-    python manage.py start_webserver
+    if api_requested; then
+        API_PORT="${TRENDRADAR_API_PORT:-3334}"
+        if [ "$API_PORT" = "${WEBSERVER_PORT:-8080}" ]; then
+            echo "📰 REST API 使用 ${API_PORT} 端口，跳过静态 Web 服务器以避免端口冲突"
+        else
+            echo "🌐 启动 Web 服务器..."
+            python manage.py start_webserver
+        fi
+
+        start_rest_api_background
+    else
+        # 启动 Web 服务器
+        echo "🌐 启动 Web 服务器..."
+        python manage.py start_webserver
+    fi
 
     echo "⏰ 启动supercronic: $CRON_EXPR"
     echo "🎯 supercronic 将作为 PID 1 运行"
